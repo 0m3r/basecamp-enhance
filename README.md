@@ -18,5 +18,5 @@ As we want to install our extension from a file (and not the Chrome Web Store) w
 
 #### Docs
 
-[Build a Chrome Extension to Streamline Your Workflow](https://www.sitepoint.com/build-a-chrome-extension/)
-[How to use FTP link/URL with FileZilla](https://superuser.com/questions/1378298/how-to-use-ftp-link-url-with-filezilla)
+- [How to use FTP link/URL with FileZilla](https://superuser.com/questions/1378298/how-to-use-ftp-link-url-with-filezilla)
+- [Build a Chrome Extension to Streamline Your Workflow](https://www.sitepoint.com/build-a-chrome-extension/)
