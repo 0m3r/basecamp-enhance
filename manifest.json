@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Basecamp Enhance",
+  "description": "A Chrome extension to enhance Basecamp functionality for Swissup",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": [ "*://basecamp.com/*" ],
+      "js": [
+        "lib/jquery.min.js",
+        "lib/jquery.copy-to-clipboard.js",
+        "scripts/main.js"
+      ]
+    }
+  ]
+}
