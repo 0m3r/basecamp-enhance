@@ -1,6 +1,6 @@
 'use strict';
 
-let ftps, ssh, pass, element, text;
+let element, text;
 
 function getRegexp(keyPart, valuePart)
 {
@@ -49,7 +49,7 @@ function getUsername ()
 
 function getPassword()
 {
-    let rpassword = getRegexp("pass(word)*", "([A-Za-z\\d@$!%*#?&)(]{4,})");
+    let rpassword = getRegexp("pass(word)*", "([A-Za-z\\d@$!%*#?&\.)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
@@ -108,49 +108,50 @@ function getSsh()
 }
 
 element = $('.formatted_content').eq(0);
-text;
-
 text = getText(element);
 
-ftps = getFtps();
-ssh = getSsh();
-pass = getPassword();
+(function () {
+    let ftps, ssh, pass;
 
-element.after(
-    '<div>' +
-        ftps +
-        '<button id="basecamp-enchance-ftp"' +
-            'data-clipboard-text="' + ftps + '">' +
-            'Copy FTPs' +
-        '</button>' +
-    '</div>'  +
+    ftps = getFtps();
+    ssh = getSsh();
+    pass = getPassword();
 
-    '<div>' +
-        ssh +
-        '<button id="basecamp-enchance-ssh"' +
-            'data-clipboard-text="' + ssh + '">' +
-            'Copy SSH' +
-        '</button>' +
-    '</div>' +
+    function addButton(idSuffix, text)
+    {
+        return '<button id="basecamp-enchance-' + idSuffix +  '"' +
+            'data-clipboard-text="' + text + '">' +
+            'Copy' +
+        '</button>'
+    }
 
-    '<div>' +
-         pass + '  ' +
-        '<button id="basecamp-enchance-pass"' +
-            'data-clipboard-text="' + pass + '">' +
-            'Copy password' +
-        '</button>' +
-    '</div>' +
-    '<p></p>'
-);
+    element.after(
+        '<div>' +
+            ftps +
+            addButton('ftp', ftps) +
+        '</div>'  +
 
-$('button#basecamp-enchance-ftp').click(function(){
-    $(this).CopyToClipboard();
-});
+        '<div>' +
+            ssh +
+            addButton('ssh', ssh) +
+        '</div>' +
 
-$('button#basecamp-enchance-ssh').click(function(){
-    $(this).CopyToClipboard();
-});
+        '<div>' +
+             pass + '  ' +
+             addButton('pass', pass) +
+        '</div>' +
+        '<p></p>'
+    );
 
-$('button#basecamp-enchance-pass').click(function(){
-    $(this).CopyToClipboard();
-});
+    $('button#basecamp-enchance-ftp').click(function(){
+        $(this).CopyToClipboard();
+    });
+
+    $('button#basecamp-enchance-ssh').click(function(){
+        $(this).CopyToClipboard();
+    });
+
+    $('button#basecamp-enchance-pass').click(function(){
+        $(this).CopyToClipboard();
+    });
+})();
