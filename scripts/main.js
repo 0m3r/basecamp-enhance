@@ -25,7 +25,7 @@ function getText(element) {
 
 function getHostname()
 {
-    let rhost = getRegexp("(host|domain|server)+", "([a-z0-9.]{3,})");
+    let rhost = getRegexp("(host|domain|server)+", "([a-z0-9\.\-]{3,})");
     let hosts = [];
     text.match(rhost) && text.match(rhost).forEach(function(host){
         hosts.push(host.replace(rhost, "$5"));
