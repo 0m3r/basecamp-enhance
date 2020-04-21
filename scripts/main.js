@@ -37,26 +37,28 @@ function getHostname()
 
 function getUsername ()
 {
-    let ruser     = getRegexp("(user|username|login)", "([a-zA-Z0-9\\-@.]{3,})");
+    let ruser     = getRegexp("(user|username|login)", "([a-zA-Z0-9\\-@._]{3,})");
     let usernames = [];
     text.match(ruser) && text.match(ruser).forEach(function(username){
         usernames.push(username.replace(ruser, "$5"));
     });
     // console.log(usernames);
 
-    return usernames.slice(-1).pop();
+    return usernames.pop();
+    // return usernames.slice(-1).pop();
 }
 
 function getPassword()
 {
-    let rpassword = getRegexp("pass(word)*", "([A-Za-z\\d@$!%*#?&\.)(]{4,})");
+    let rpassword = getRegexp("(pass|password|pw)", "([A-Za-z\\d@$!%*#?&\.)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
     });
     // console.log(passwords);
 
-    return passwords.slice(-1).pop();
+    return passwords.pop();
+    // return passwords.slice(-1).pop();
 }
 
 function getWorkingDir()
