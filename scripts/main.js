@@ -115,6 +115,10 @@ text = getText(element);
 (function () {
     let ftps, ssh, pass;
 
+    if ($('.formatted_content').eq(0).length === 0) {
+        return;
+    }
+
     ftps = getFtps();
     ssh = getSsh();
     pass = getPassword();
