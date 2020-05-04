@@ -50,7 +50,7 @@ function getUsername ()
 
 function getPassword()
 {
-    let rpassword = getRegexp("(pass|password|pw)", "([A-Za-z\\d@$!%*#?&_\/\.)(]{4,})");
+    let rpassword = getRegexp("(pass|password|pw)", "([A-Za-z\\d@$!%*#?&_\/\.\:)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
