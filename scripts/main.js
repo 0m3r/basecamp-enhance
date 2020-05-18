@@ -35,7 +35,7 @@ function getHostname()
     return hosts.slice(-1).pop();
 }
 
-function getUsername()
+function getUsernames()
 {
     let ruser     = getRegexp("(user|username|login)", "([a-zA-Z0-9\\-@._]{3,})");
     let usernames = [];
@@ -44,21 +44,74 @@ function getUsername()
     });
     // console.log(usernames);
 
+    return usernames;
+    // return usernames.slice(-1).pop();
+}
+
+function getUsername()
+{
+    let usernames = getUsernames();
+
     return usernames.pop();
     // return usernames.slice(-1).pop();
 }
 
-function getPassword()
+function getUsernameByHost(host)
 {
-    let rpassword = getRegexp("(pass|password|pw|pwd)", "([A-Za-z\\d@$!%*#?&_\/\.\:)(]{4,})");
+    let usernames = getUsernames();
+    let username = usernames.pop();
+    let index = Math.abs(text.indexOf(host) - text.indexOf(username));
+
+    usernames.forEach(tusername => {
+        const tindex = Math.abs(text.indexOf(host) - text.indexOf(tusername));
+        if (tindex < index) {
+            index = tindex;
+            username = tusername;
+        }
+    });
+
+    return username;
+    // return usernames.pop();
+    // return usernames.slice(-1).pop();
+}
+
+function getPasswords()
+{
+    let rpassword = getRegexp("(pass|password|pw|pwd)", "([A-Za-z\\d@$!%*#?&_\/\.\:\;\^)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
     });
     // console.log(passwords);
 
+    return passwords;
+}
+
+function getPassword()
+{
+    let passwords = getPasswords();
+
     return passwords.pop();
     // return passwords.slice(-1).pop();
+}
+
+function getPasswordByHost(host)
+{
+    let passwords = getPasswords();
+    let password = passwords.pop();
+    let index = Math.abs(text.indexOf(host) - text.indexOf(password));
+
+    passwords.forEach(tpassword => {
+        const tindex = Math.abs(text.indexOf(host) - text.indexOf(tpassword));
+        if (tindex < index) {
+            index = tindex;
+            password = tpassword;
+        }
+    });
+
+    return password;
+    // return usernames.pop();
+    // return usernames.slice(-1).pop();
 }
 
 function getWorkingDir()
@@ -88,25 +141,30 @@ function getPort()
 
 function getFtps() {
 
-    let port = getPort();
-    let path = getWorkingDir();
+    const host = getHostname();
+    // const user = getUsername();
+    const user = getUsernameByHost(host);
+    // const pass = getPassword();
+    const pass = getPasswordByHost(host);
+    const port = getPort();
+    const path = getWorkingDir();
+
 
     return 'sftp://' +
-        getUsername() + ':' +
-        getPassword() + '@' +
-        getHostname() +
+        user + ':' +
+        pass + '@' +
+        host +
         (port ? ':' + port : '') +
         (path ? '/' + path : '');
 }
 
 function getSsh()
 {
+    const host = getHostname();
+    const user = getUsernameByHost(host);
     let port = getPort();
 
-    return 'ssh ' +
-        getUsername() + '@' +
-        getHostname() +
-        (port ? ' -p ' + port : '');
+    return 'ssh ' + user + '@' + host + (port ? ' -p ' + port : '');
 }
 
 element = $('.formatted_content').eq(0);
@@ -121,7 +179,8 @@ text = getText(element);
 
     ftps = getFtps();
     ssh = getSsh();
-    pass = getPassword();
+    // pass = getPassword();
+    pass = getPasswordByHost(getHostname());
     path = getWorkingDir();
 
     function addButton(idSuffix, text)
