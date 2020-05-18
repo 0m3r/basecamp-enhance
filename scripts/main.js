@@ -35,7 +35,7 @@ function getHostname()
     return hosts.slice(-1).pop();
 }
 
-function getUsername ()
+function getUsername()
 {
     let ruser     = getRegexp("(user|username|login)", "([a-zA-Z0-9\\-@._]{3,})");
     let usernames = [];
@@ -50,7 +50,7 @@ function getUsername ()
 
 function getPassword()
 {
-    let rpassword = getRegexp("(pass|password|pw)", "([A-Za-z\\d@$!%*#?&_\/\.\:)(]{4,})");
+    let rpassword = getRegexp("(pass|password|pw|pwd)", "([A-Za-z\\d@$!%*#?&_\/\.\:)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
@@ -113,7 +113,7 @@ element = $('.formatted_content').eq(0);
 text = getText(element);
 
 (function () {
-    let ftps, ssh, pass;
+    let ftps, ssh, pass, path;
 
     if ($('.formatted_content').eq(0).length === 0) {
         return;
@@ -122,6 +122,7 @@ text = getText(element);
     ftps = getFtps();
     ssh = getSsh();
     pass = getPassword();
+    path = getWorkingDir();
 
     function addButton(idSuffix, text)
     {
@@ -146,6 +147,12 @@ text = getText(element);
              pass + '  ' +
              addButton('pass', pass) +
         '</div>' +
+
+        (path ? '<div>' +
+             'cd ' + path + '  ' +
+             addButton('path', 'cd ' + path) +
+        '</div>' : '') +
+
         '<p></p>'
     );
 
@@ -158,6 +165,10 @@ text = getText(element);
     });
 
     $('button#basecamp-enchance-pass').click(function(){
+        $(this).CopyToClipboard();
+    });
+
+    $('button#basecamp-enchance-path').click(function(){
         $(this).CopyToClipboard();
     });
 })();
