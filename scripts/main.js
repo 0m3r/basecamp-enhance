@@ -60,10 +60,12 @@ function getUsernameByHost(host)
 {
     let usernames = getUsernames();
     let username = usernames.pop();
-    let index = Math.abs(text.indexOf(host) - text.indexOf(username));
+    const hostIndex = text.lastIndexOf(host);
+
+    let index = Math.abs(hostIndex - text.lastIndexOf(username));
 
     usernames.forEach(tusername => {
-        const tindex = Math.abs(text.indexOf(host) - text.indexOf(tusername));
+        const tindex = Math.abs(hostIndex - text.lastIndexOf(tusername));
         if (tindex < index) {
             index = tindex;
             username = tusername;
@@ -99,10 +101,11 @@ function getPasswordByHost(host)
 {
     let passwords = getPasswords();
     let password = passwords.pop();
-    let index = Math.abs(text.indexOf(host) - text.indexOf(password));
+    const hostIndex = text.lastIndexOf(host);
+    let index = Math.abs(hostIndex - text.lastIndexOf(password));
 
     passwords.forEach(tpassword => {
-        const tindex = Math.abs(text.indexOf(host) - text.indexOf(tpassword));
+        const tindex = Math.abs(hostIndex - text.lastIndexOf(tpassword));
         if (tindex < index) {
             index = tindex;
             password = tpassword;
