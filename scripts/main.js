@@ -13,11 +13,11 @@ function getRegexp(keyPart, valuePart)
 
 function getText(element) {
 
-    let text = element.text();
+    let text = element.html();
     let rhost = getRegexp("(host|domain|server)+", "([a-z0-9.]{3,})");
 
     if (text.match(rhost) === null) {
-        text = element.html();
+        text = element.text();
     }
 
     return text;
