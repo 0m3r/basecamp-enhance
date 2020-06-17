@@ -94,6 +94,10 @@ function getUsernameByHost(host)
         });
     });
 
+    if (!username) {
+        username = usernames.pop();
+    }
+
     return username;
     // return usernames.pop();
     // return usernames.slice(-1).pop();
@@ -119,24 +123,34 @@ function getPassword()
     // return passwords.slice(-1).pop();
 }
 
-function getPasswordByHost(host)
+function getPasswordByUsername(username)
 {
     let passwords = getPasswords();
-    let password = passwords.pop();
-    const hostIndex = text.lastIndexOf(host);
-    let index = Math.abs(hostIndex - text.lastIndexOf(password));
+    let password;//passwords.pop();
+    //const hostIndex = text.lastIndexOf(username);
+    //let index = Math.abs(hostIndex - text.lastIndexOf(password));
+    let minLength = text.length + 10;
 
-    passwords.forEach(tpassword => {
-        const tindex = Math.abs(hostIndex - text.lastIndexOf(tpassword));
-        if (tindex < index) {
-            index = tindex;
-            password = tpassword;
-        }
+    console.log(username, getIndicesOf(username, text, true));
+    getIndicesOf(username, text, true).forEach(usernameIndex => {
+        passwords.forEach(tpassword => {
+            console.log(tpassword, getIndicesOf(tpassword, text, true));
+            getIndicesOf(tpassword, text, true).forEach(passwordIndex => {
+                const length = Math.abs(usernameIndex - passwordIndex);
+                if (minLength > length) {
+                    minLength = length;
+                    password = tpassword;
+                }
+            });
+        });
     });
 
+    if (!password) {
+        password = passwords.pop();
+    }
     return password;
-    // return usernames.pop();
-    // return usernames.slice(-1).pop();
+    // return passwords.pop();
+    // return passwords.slice(-1).pop();
 }
 
 function getWorkingDir()
@@ -170,7 +184,7 @@ function getFtps() {
     // const user = getUsername();
     const user = getUsernameByHost(host);
     // const pass = getPassword();
-    const pass = getPasswordByHost(host);
+    const pass = getPasswordByUsername(user);
     const port = getPort();
     const path = getWorkingDir();
 
@@ -205,7 +219,11 @@ text = getText(element);
     ftps = getFtps();
     ssh = getSsh();
     // pass = getPassword();
-    pass = getPasswordByHost(getHostname());
+    pass = getPasswordByUsername(
+        getUsernameByHost(
+            getHostname()
+        )
+    );
     path = getWorkingDir();
 
     function addButton(idSuffix, text)
