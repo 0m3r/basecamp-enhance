@@ -126,16 +126,12 @@ function getPassword()
 function getPasswordByUsername(username)
 {
     let passwords = getPasswords();
-    let password;//passwords.pop();
-    //const hostIndex = text.lastIndexOf(username);
-    //let index = Math.abs(hostIndex - text.lastIndexOf(password));
+    let password;
     let minLength = text.length + 10;
 
-    console.log(username, getIndicesOf(username, text, true));
     getIndicesOf(username, text, true).forEach(usernameIndex => {
         passwords.forEach(tpassword => {
-            console.log(tpassword, getIndicesOf(tpassword, text, true));
-            getIndicesOf(tpassword, text, true).forEach(passwordIndex => {
+                getIndicesOf(tpassword, text, true).forEach(passwordIndex => {
                 const length = Math.abs(usernameIndex - passwordIndex);
                 if (minLength > length) {
                     minLength = length;
@@ -155,14 +151,13 @@ function getPasswordByUsername(username)
 
 function getWorkingDir()
 {
-    let rpath     = getRegexp("(path|dir)+", "([~\\.A-Za-z\\d-\\/\\\\]{3,})");
-    let path = '';
+    let rpath = getRegexp("(path|dir)+", "([~\\.A-Za-z\\d-\\/\\\\_]{3,})");
+    let paths = [];
     text.match(rpath) && text.match(rpath).forEach(function(tpath){
-        path = tpath.replace(rpath, "$5");
+        paths.push(tpath.replace(rpath, "$5"));
     });
-    // console.log(path);
 
-    return path;
+    return paths.pop();
 }
 
 function getPort()
