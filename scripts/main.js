@@ -4,7 +4,7 @@ let element, text;
 
 function getRegexp(keyPart, valuePart)
 {
-    const start = "(^|<div>|<br>)\\s*";
+    const start = "(^|<div>|<br>|\s)\\s*";
     const delimiter = "(\\s|&nbsp;)*[:-]*(\\s|&nbsp;)*";
     const end = "\\s*($|&nbsp;|<\/div>|<br>)";
 
@@ -16,9 +16,12 @@ function getText(element) {
     let text = element.html();
     let rhost = getRegexp("(host|domain|server|ip)+", "([a-z0-9\.\-]{3,})");
 
-    if (text.match(rhost) === null) {
+    if (text && text.match && text.match(rhost) === null) {
         text = element.text();
     }
+    text = text.replace(/&nbsp;/g, ' ');
+    text = text.replace(/<br\/>/g, ' ');
+    text = text.replace(/<br>/g, "\n");
 
     return text;
 }
@@ -56,20 +59,39 @@ function getUsername()
     // return usernames.slice(-1).pop();
 }
 
+function getIndicesOf(searchStr, str, caseSensitive) {
+    var searchStrLen = searchStr.length;
+    if (searchStrLen == 0) {
+        return [];
+    }
+    var startIndex = 0, index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+        indices.push(index);
+        startIndex = index + searchStrLen;
+    }
+    return indices;
+}
+
 function getUsernameByHost(host)
 {
     let usernames = getUsernames();
-    let username = usernames.pop();
-    const hostIndex = text.lastIndexOf(host);
+    let username;
+    let minLength = text.length + 10;
 
-    let index = Math.abs(hostIndex - text.lastIndexOf(username));
-
-    usernames.forEach(tusername => {
-        const tindex = Math.abs(hostIndex - text.lastIndexOf(tusername));
-        if (tindex < index) {
-            index = tindex;
-            username = tusername;
-        }
+    getIndicesOf(host, text, true).forEach(hostIndex => {
+        usernames.forEach(tusername => {
+            getIndicesOf(tusername, text, true).forEach(usernameIndex => {
+                let length = Math.abs(hostIndex - usernameIndex);
+                if (minLength > length) {
+                    minLength = length;
+                    username = tusername;
+                }
+            });
+        });
     });
 
     return username;
@@ -79,7 +101,7 @@ function getUsernameByHost(host)
 
 function getPasswords()
 {
-    let rpassword = getRegexp("(pass|password|pw|pwd|P)", "([A-Za-z\\d@$!%*#?&_\/\.\:\;\^)(]{4,})");
+    let rpassword = getRegexp("(pass|password|pw|pwd|P|PS)", "([A-Za-z\\d@$!%*#?&_\/\.\:\;\^)(]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
