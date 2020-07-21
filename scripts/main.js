@@ -6,7 +6,7 @@ function getRegexp(keyPart, valuePart)
 {
     const start = "(^|<div>|<br>|\s)\\s*";
     const delimiter = "(\\s|&nbsp;)*[:-]*(\\s|&nbsp;)*";
-    const end = "\\s*($|&nbsp;|<\/div>|<br>)";
+    const end = "\\s*($|&nbsp;|<\/div>|<br>|<\/pre>)";
 
     return new RegExp(start + keyPart + delimiter + valuePart + end, "img");
 }
@@ -151,7 +151,7 @@ function getPasswordByUsername(username)
 
 function getWorkingDir()
 {
-    let rpath = getRegexp("(path|dir)+", "([~\\.A-Za-z\\d-\\/\\\\_]{3,})");
+    let rpath = getRegexp("(path|dir|web root|root|homedir)+", "([~\\.A-Za-z\\d-\\/\\\\_]{3,})");
     let paths = [];
     text.match(rpath) && text.match(rpath).forEach(function(tpath){
         paths.push(tpath.replace(rpath, "$5"));
