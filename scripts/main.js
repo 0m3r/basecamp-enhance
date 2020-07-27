@@ -60,6 +60,9 @@ function getUsername()
 }
 
 function getIndicesOf(searchStr, str, caseSensitive) {
+    if (typeof searchStr === "undefined") {
+        return [];
+    }
     var searchStrLen = searchStr.length;
     if (searchStrLen == 0) {
         return [];
