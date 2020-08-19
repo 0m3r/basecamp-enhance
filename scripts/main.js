@@ -4,7 +4,7 @@ let element, text;
 
 function getRegexp(keyPart, valuePart)
 {
-    const start = "(^|<div>|<br>|\s)\\s*";
+    const start = "(^|<div>|<br>|<pre>|\s)\\s*";
     const delimiter = "(\\s|&nbsp;)*[:-]*(\\s|&nbsp;)*";
     const end = "\\s*($|&nbsp;|<\/div>|<br>|<\/pre>)";
 
