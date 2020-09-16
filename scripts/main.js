@@ -108,7 +108,7 @@ function getUsernameByHost(host)
 
 function getPasswords()
 {
-    let rpassword = getRegexp("(pass|password|pw|pwd|P|PS)", "([A-Za-z\\d@$!%*#?&_\`\'\"\.\:\;\^\)\(\}\{\/\[]{4,})");
+    let rpassword = getRegexp("(pass|Pass|password|pw|pwd|P|PS)", "([A-Za-z\\d@$!%*#?&_\\-\`\'\"\.\:\;\^\)\(\}\{\/\[]{4,})");
     let passwords = [];
     text.match(rpassword) && text.match(rpassword).forEach(function(password){
         passwords.push(password.replace(rpassword, "$5"));
@@ -154,7 +154,7 @@ function getPasswordByUsername(username)
 
 function getWorkingDir()
 {
-    let rpath = getRegexp("(path|dir|web root|root|homedir)+", "([~\\.A-Za-z\\d-\\/\\\\_]{3,})");
+    let rpath = getRegexp("(path|dir|web root|root|homedir|folder|Folder)+", "([~\\.A-Za-z\\d-\\/\\\\_]{3,})");
     let paths = [];
     text.match(rpath) && text.match(rpath).forEach(function(tpath){
         paths.push(tpath.replace(rpath, "$5"));
